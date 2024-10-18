@@ -2641,6 +2641,7 @@ void Ctxt::writeTo(std::ostream& str) const
   */
 
   write_raw_int(str, ptxtSpace);
+  write_raw_int(str, nAggregates);
   write_raw_int(str, intFactor);
   write_raw_xdouble(str, ptxtMag);
   write_raw_xdouble(str, ratFactor);
@@ -2672,6 +2673,7 @@ void Ctxt::read(std::istream& str)
                       "Could not find pre-ciphertext eye catcher");
 
   ptxtSpace = read_raw_int(str);
+  nAggregates = read_raw_int(str);
   intFactor = read_raw_int(str);
   ptxtMag = read_raw_xdouble(str);
   ratFactor = read_raw_xdouble(str);
@@ -2697,6 +2699,7 @@ JsonWrapper Ctxt::writeToJSON() const
   auto body = [this]() {
     json j = {{"ptxtSpace", this->ptxtSpace},
               {"noiseBound", this->noiseBound},
+              {"nAggregates", this->nAggregates},
               {"primeSet", unwrap(this->primeSet.writeToJSON())},
               {"intFactor", this->intFactor},
               {"ptxtMag", this->ptxtMag},
@@ -2738,6 +2741,7 @@ void Ctxt::readJSON(const JsonWrapper& jw)
   auto body = [&]() {
     json j = fromTypedJson<Ctxt>(unwrap(jw));
     this->ptxtSpace = j.at("ptxtSpace");
+    this->nAggregates = j.at("nAggregates");
     this->intFactor = j.at("intFactor");
     this->ptxtMag = j.at("ptxtMag").get<NTL::xdouble>();
     this->ratFactor = j.at("ratFactor").get<NTL::xdouble>();
